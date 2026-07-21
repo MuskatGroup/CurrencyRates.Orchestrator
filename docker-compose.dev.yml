@@ -5,3 +5,6 @@ services:
   finance:
     env_file:
       - .env.dev
+  gateway:
+    env_file:
+      - .env.dev

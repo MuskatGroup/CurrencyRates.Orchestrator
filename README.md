@@ -10,6 +10,7 @@
 CurrencyRates/
   CurrencyRates.Orchestrator/     ← вы здесь
   CurrencyRates.FinanceService/   ← нужен для build finance
+  CurrencyRates.GatewayService/   ← нужен для build gateway
 ```
 
 Установлены Docker Desktop / Docker Engine + Compose v2.
@@ -19,7 +20,8 @@ CurrencyRates/
 | Сервис | Порт | Описание |
 |--------|------|----------|
 | postgres | 5432 | PostgreSQL 16 |
-| finance | 5002 | FinanceService API |
+| finance | 5002 | FinanceService API (прямая отладка) |
+| gateway | 5000 | YARP API Gateway — **основная точка входа** |
 
 ## Подготовка env
 
@@ -55,37 +57,31 @@ docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.y
 Статус:
 ```bash
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml ps
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml ps -a
 ```
 
 Логи:
 ```bash
+docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs gateway
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs finance
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs --tail=100 finance
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs -f finance
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs
 ```
 
-Проверка контейнера:
-```bash
-docker inspect currencyrates-finance | grep -A 10 "State"
-docker logs currencyrates-finance --tail 50
-```
+### Dev endpoints (через Gateway)
 
-### Dev endpoints
+- Health: http://localhost:5000/health
+- Dev token: `POST http://localhost:5000/api/finance/dev/token`
+- Rates: `GET http://localhost:5000/api/finance/rates` + Bearer
+- Finance Swagger напрямую: http://localhost:5002/swagger
 
-- Swagger: http://localhost:5002/swagger
-- Dev token: `POST http://localhost:5002/api/finance/dev/token`
-- Rates: `GET http://localhost:5002/api/finance/rates` + Bearer
-- Health: http://localhost:5002/HealthCheck/health
+`/api/users/**` пока даёт **502** (UserService ещё не в стеке).
 
 ## Production
 
 ```bash
 cp .env.example .env.prod
-# Задайте сильные POSTGRES_PASSWORD и JWT_SECRET_KEY (минимум 32 символа)
 # FINANCE_ASPNETCORE_ENVIRONMENT=Production
+# GATEWAY_ASPNETCORE_ENVIRONMENT=Production
 # FINANCE_SEED_ENABLED=false
+# сильные POSTGRES_PASSWORD и JWT_SECRET_KEY
 
 docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
@@ -94,12 +90,6 @@ docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod
 ```bash
 ./scripts/deploy/deploy_prod.sh
 ```
-
-В Production:
-
-- seed выключен (`FINANCE_SEED_ENABLED=false`)
-- `/api/finance/dev/token` → 404
-- секреты только из `.env.prod` (файл в `.gitignore`)
 
 ## Остановка
 

@@ -43,6 +43,27 @@ services:
     networks:
       - app-network
 
+  gateway:
+    build:
+      context: ../CurrencyRates.GatewayService
+      dockerfile: CurrencyRates.GatewayService.Api/Dockerfile
+    container_name: currencyrates-gateway
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_URLS: ${GATEWAY_ASPNETCORE_URLS:-http://+:8080}
+      ASPNETCORE_ENVIRONMENT: ${GATEWAY_ASPNETCORE_ENVIRONMENT:-Development}
+      Jwt__Issuer: ${JWT_ISSUER:-CurrencyRates}
+      Jwt__Audience: ${JWT_AUDIENCE:-CurrencyRates}
+      Jwt__SecretKey: ${JWT_SECRET_KEY:-CurrencyRates_Dev_SecretKey_ChangeMe_32+}
+      ReverseProxy__Clusters__finance__Destinations__finance-destination__Address: ${GATEWAY_FINANCE_ADDRESS:-http://finance:8080/}
+      ReverseProxy__Clusters__users__Destinations__users-destination__Address: ${GATEWAY_USERS_ADDRESS:-http://user:8080/}
+    depends_on:
+      - finance
+    ports:
+      - "${GATEWAY_HOST_PORT:-5000}:8080"
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
 

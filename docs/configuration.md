@@ -30,6 +30,16 @@
 | `FINANCE_SEED_TEST_USER_ID` | Id demo-пользователя |
 | `FINANCE_SEED_TEST_USER_NAME` | Имя demo-пользователя |
 
+## Gateway Service
+
+| Переменная | Описание |
+|------------|----------|
+| `GATEWAY_ASPNETCORE_URLS` | URL внутри контейнера (`http://+:8080`) |
+| `GATEWAY_ASPNETCORE_ENVIRONMENT` | `Development` / `Production` |
+| `GATEWAY_HOST_PORT` | Порт на хосте (по умолчанию `5000`) |
+| `GATEWAY_FINANCE_ADDRESS` | Upstream Finance (`http://finance:8080/`) |
+| `GATEWAY_USERS_ADDRESS` | Upstream User (`http://user:8080/`) — до UserService будет 502 |
+
 ## Запуск
 
 ```bash
