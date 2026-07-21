@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: currencyrates-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-currencyrates}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-currencyrates}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  finance:
+    build:
+      context: ../CurrencyRates.FinanceService
+      dockerfile: src/CurrencyRates.FinanceService.Api/Dockerfile
+    container_name: currencyrates-finance
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_URLS: ${FINANCE_ASPNETCORE_URLS:-http://+:8080}
+      ASPNETCORE_ENVIRONMENT: ${FINANCE_ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__DefaultConnection: ${FINANCE_CONNECTION_STRING:-Host=postgres;Port=5432;Database=currencyrates;Username=postgres;Password=postgres}
+      Jwt__Issuer: ${JWT_ISSUER:-CurrencyRates}
+      Jwt__Audience: ${JWT_AUDIENCE:-CurrencyRates}
+      Jwt__SecretKey: ${JWT_SECRET_KEY:-CurrencyRates_Dev_SecretKey_ChangeMe_32+}
+      Seed__Enabled: ${FINANCE_SEED_ENABLED:-true}
+      Seed__TestUserId: ${FINANCE_SEED_TEST_USER_ID:-11111111-1111-1111-1111-111111111111}
+      Seed__TestUserName: ${FINANCE_SEED_TEST_USER_NAME:-demo}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${FINANCE_HOST_PORT:-5002}:8080"
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

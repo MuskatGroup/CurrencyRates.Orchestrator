@@ -1,0 +1,42 @@
+---
+description: CurrencyRates Orchestrator — docker-compose и документация
+alwaysApply: true
+---
+
+# Orchestrator
+
+Этот репозиторий — точка входа для всего стека CurrencyRates.
+
+## Ответственность
+
+- `docker-compose.yml` — Postgres + все сервисы (базовый)
+- `docker-compose.dev.yml` / `docker-compose.prod.yml` — `env_file` (`.env.dev` / `.env.prod`)
+- `.env.example` — шаблон переменных окружения
+- `scripts/build`, `scripts/deploy` — сборка и деплой
+- Главный README с инструкцией запуска и ссылками на репозитории
+- `AGENTS.md` и skill `currencyrates-architecture` — архитектурный контекст
+
+## Запуск (как в Wallet)
+
+```bash
+docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d
+docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+## Порядок запуска
+
+Postgres → Migration → Worker → User + Finance → Gateway
+
+## Порты (рекомендуемые)
+
+| Сервис | Порт |
+|--------|------|
+| Gateway | 5000 |
+| User | 5001 |
+| Finance | 5002 |
+| Postgres | 5432 |
+
+## Не добавлять
+
+- C#-код бизнес-логики (он в отдельных репозиториях)
+- EF migrations (только MigrationService)

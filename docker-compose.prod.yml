@@ -1,0 +1,7 @@
+services:
+  postgres:
+    env_file:
+      - .env.prod
+  finance:
+    env_file:
+      - .env.prod
