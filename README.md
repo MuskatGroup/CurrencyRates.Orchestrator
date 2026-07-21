@@ -9,6 +9,7 @@
 ```
 CurrencyRates/
   CurrencyRates.Orchestrator/     ← вы здесь
+  CurrencyRates.MigrationService/ ← нужен для build migration
   CurrencyRates.FinanceService/   ← нужен для build finance
   CurrencyRates.GatewayService/   ← нужен для build gateway
 ```
@@ -20,6 +21,7 @@ CurrencyRates/
 | Сервис | Порт | Описание |
 |--------|------|----------|
 | postgres | 5432 | PostgreSQL 16 |
+| migration | — | EF migrations (one-shot, exit 0) |
 | finance | 5002 | FinanceService API (прямая отладка) |
 | gateway | 5000 | YARP API Gateway — **основная точка входа** |
 
@@ -59,8 +61,11 @@ docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.y
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml ps
 ```
 
+**Важно:** при первом запуске Migration после старых Finance-миграций сбросьте volume: `docker compose ... down -v`.
+
 Логи:
 ```bash
+docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs migration
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs gateway
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs finance
 ```
@@ -106,6 +111,10 @@ docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod
 ## Конфигурация
 
 См. [docs/configuration.md](docs/configuration.md).
+
+## План оставшихся работ по ТЗ
+
+См. [docs/remaining-tz-plan.md](docs/remaining-tz-plan.md) — статус и задачи по каждому сервису.
 
 ## Репозитории
 

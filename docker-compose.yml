@@ -19,6 +19,20 @@ services:
     networks:
       - app-network
 
+  migration:
+    build:
+      context: ../CurrencyRates.MigrationService
+      dockerfile: Dockerfile
+    container_name: currencyrates-migration
+    restart: "no"
+    environment:
+      ConnectionStrings__DefaultConnection: ${MIGRATION_CONNECTION_STRING:-Host=postgres;Port=5432;Database=currencyrates;Username=postgres;Password=postgres}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
   finance:
     build:
       context: ../CurrencyRates.FinanceService
@@ -36,8 +50,8 @@ services:
       Seed__TestUserId: ${FINANCE_SEED_TEST_USER_ID:-11111111-1111-1111-1111-111111111111}
       Seed__TestUserName: ${FINANCE_SEED_TEST_USER_NAME:-demo}
     depends_on:
-      postgres:
-        condition: service_healthy
+      migration:
+        condition: service_completed_successfully
     ports:
       - "${FINANCE_HOST_PORT:-5002}:8080"
     networks:

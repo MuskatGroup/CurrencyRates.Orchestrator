@@ -10,6 +10,12 @@
 | `POSTGRES_PASSWORD` | Пароль |
 | `POSTGRES_DB` | Имя базы |
 
+## Migration Service
+
+| Переменная | Описание |
+|------------|----------|
+| `MIGRATION_CONNECTION_STRING` | Строка подключения для one-shot Runner (`Host=postgres;...`) |
+
 ## JWT
 
 | Переменная | Описание |

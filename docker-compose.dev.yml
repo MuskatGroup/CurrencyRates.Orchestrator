@@ -2,6 +2,9 @@ services:
   postgres:
     env_file:
       - .env.dev
+  migration:
+    env_file:
+      - .env.dev
   finance:
     env_file:
       - .env.dev

@@ -27,9 +27,11 @@
 1. MigrationService → схема БД
 2. RatesWorkerService → CBR sync
 3. UserService → auth + JWT
-4. FinanceService → rates по favorites
-5. GatewayService → YARP
-6. Orchestrator → docker-compose + README
+4. FinanceService → rates по favorites *(сделано; потом убрать Migrate из Finance)*
+5. GatewayService → YARP *(сделано)*
+6. Orchestrator → полный docker-compose
+
+Оставшиеся задачи по сервисам: [docs/remaining-tz-plan.md](docs/remaining-tz-plan.md).
 
 ## Открытие workspace
 
