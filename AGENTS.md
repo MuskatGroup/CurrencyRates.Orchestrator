@@ -24,12 +24,12 @@
 
 ## Порядок разработки
 
-1. MigrationService → схема БД
-2. RatesWorkerService → CBR sync
-3. UserService → auth + JWT
-4. FinanceService → rates по favorites *(сделано; потом убрать Migrate из Finance)*
+1. MigrationService → схема БД *(сделано)*
+2. RatesWorkerService → CBR sync *(сделано)*
+3. UserService → auth + JWT *(сделано)*
+4. FinanceService → rates по favorites *(сделано)*
 5. GatewayService → YARP *(сделано)*
-6. Orchestrator → полный docker-compose
+6. Orchestrator → полный docker-compose *(сделано; smoke e2e опционально)*
 
 Оставшиеся задачи по сервисам: [docs/remaining-tz-plan.md](docs/remaining-tz-plan.md).
 

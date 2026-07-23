@@ -24,6 +24,24 @@
 | `JWT_AUDIENCE` | Audience токена |
 | `JWT_SECRET_KEY` | Секрет подписи (минимум 32 символа). В prod: `openssl rand -base64 48` |
 
+## Rates Worker Service
+
+| Переменная | Описание |
+|------------|----------|
+| `WORKER_DOTNET_ENVIRONMENT` | `Development` / `Production` |
+| `WORKER_CONNECTION_STRING` | Строка подключения к Postgres |
+| `WORKER_CBR_URL` | URL XML ЦБ РФ |
+| `WORKER_CBR_INTERVAL` | Интервал синхронизации (`01:00:00`) |
+
+## User Service
+
+| Переменная | Описание |
+|------------|----------|
+| `USER_ASPNETCORE_URLS` | URL внутри контейнера (`http://+:8080`) |
+| `USER_ASPNETCORE_ENVIRONMENT` | `Development` / `Production` |
+| `USER_HOST_PORT` | Порт на хосте (по умолчанию `5001`) |
+| `USER_CONNECTION_STRING` | Строка подключения к Postgres |
+
 ## Finance Service
 
 | Переменная | Описание |
@@ -44,7 +62,7 @@
 | `GATEWAY_ASPNETCORE_ENVIRONMENT` | `Development` / `Production` |
 | `GATEWAY_HOST_PORT` | Порт на хосте (по умолчанию `5000`) |
 | `GATEWAY_FINANCE_ADDRESS` | Upstream Finance (`http://finance:8080/`) |
-| `GATEWAY_USERS_ADDRESS` | Upstream User (`http://user:8080/`) — до UserService будет 502 |
+| `GATEWAY_USERS_ADDRESS` | Upstream User (`http://user:8080/`) |
 
 ## Запуск
 
