@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compose:
+    name: Docker Compose validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare env file
+        run: cp .env.example .env.dev
+
+      - name: Validate compose (dev)
+        run: docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml config --quiet
+
+      - name: Validate compose (prod)
+        run: |
+          cp .env.example .env.prod
+          docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml config --quiet
