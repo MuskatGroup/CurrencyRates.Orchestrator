@@ -15,6 +15,7 @@
 | `CurrencyRates.UserService` | MuskatGroup/CurrencyRates.UserService |
 | `CurrencyRates.FinanceService` | MuskatGroup/CurrencyRates.FinanceService |
 | `CurrencyRates.GatewayService` | MuskatGroup/CurrencyRates.GatewayService |
+| `CurrencyRates.Web` | MuskatGroup/CurrencyRates.Web |
 
 ## Cursor-конфигурация
 
@@ -29,7 +30,8 @@
 3. UserService → auth + JWT *(сделано)*
 4. FinanceService → rates по favorites *(сделано)*
 5. GatewayService → YARP *(сделано)*
-6. Orchestrator → полный docker-compose *(сделано; smoke e2e опционально)*
+6. Orchestrator → полный docker-compose *(сделано)*
+7. Web → демо SPA *(сделано)*
 
 Оставшиеся задачи по сервисам: [docs/remaining-tz-plan.md](docs/remaining-tz-plan.md).
 

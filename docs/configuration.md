@@ -64,6 +64,12 @@
 | `GATEWAY_FINANCE_ADDRESS` | Upstream Finance (`http://finance:8080/`) |
 | `GATEWAY_USERS_ADDRESS` | Upstream User (`http://user:8080/`) |
 
+## Web (demo SPA)
+
+| Переменная | Описание |
+|------------|----------|
+| `WEB_HOST_PORT` | Порт на хосте (по умолчанию `3000`) |
+
 ## Запуск
 
 ```bash

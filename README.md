@@ -14,6 +14,7 @@ CurrencyRates/
   CurrencyRates.UserService/         ← нужен для build user
   CurrencyRates.FinanceService/      ← нужен для build finance
   CurrencyRates.GatewayService/      ← нужен для build gateway
+  CurrencyRates.Web/                 ← нужен для build web (демо UI)
 ```
 
 Установлены Docker Desktop / Docker Engine + Compose v2.
@@ -27,7 +28,8 @@ CurrencyRates/
 | worker | — | CBR → upsert `currency` |
 | user | 5001 | UserService API (register/login/logout) |
 | finance | 5002 | FinanceService API (прямая отладка) |
-| gateway | 5000 | YARP API Gateway — **основная точка входа** |
+| gateway | 5000 | YARP API Gateway — **основная точка входа API** |
+| web | 3000 | React демо-UI (через nginx → gateway) |
 
 ## Подготовка env
 
@@ -75,6 +77,11 @@ docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.y
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs gateway
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml logs finance
 ```
+
+### Dev UI
+
+- Web: http://localhost:3000 — register → favorites → rates
+- API по-прежнему через Gateway: http://localhost:5000
 
 ### Dev endpoints (через Gateway)
 

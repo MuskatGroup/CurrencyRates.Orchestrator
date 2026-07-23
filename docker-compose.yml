@@ -117,6 +117,19 @@ services:
     networks:
       - app-network
 
+  web:
+    build:
+      context: ../CurrencyRates.Web
+      dockerfile: Dockerfile
+    container_name: currencyrates-web
+    restart: unless-stopped
+    depends_on:
+      - gateway
+    ports:
+      - "${WEB_HOST_PORT:-3000}:80"
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
 
